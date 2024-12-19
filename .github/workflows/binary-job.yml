@@ -1,0 +1,62 @@
+name: Reusable Binary Build Job
+
+on:
+  workflow_call:
+
+jobs:
+  binary:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - os-name: Linux-x86_64
+            runs-on: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            use-cross: false
+          - os-name: Linux-aarch64
+            runs-on: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            use-cross: true
+          - os-name: macOS-aarch64
+            runs-on: macOS-latest
+            target: aarch64-apple-darwin
+            use-cross: false
+    runs-on: ${{ matrix.platform.runs-on }}
+    env:
+      BUILD_CMD: cargo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform.target }}
+      
+      # Add musl tools installation for Linux targets
+      - name: Install musl tools
+        if: contains(matrix.platform.target, 'linux-musl')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+
+      - name: Cache cargo & target directories
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "v2"
+      - name: Install cross
+        if: matrix.platform.use-cross
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cross
+      - name: Overwrite build command env variable
+        if: matrix.platform.use-cross
+        shell: bash
+        run: echo "BUILD_CMD=cross" >> $GITHUB_ENV
+      - name: Build binary
+        run: $BUILD_CMD build --locked --release --target ${{ matrix.platform.target }}
+      - name: Strip binary
+        run: strip target/${{ matrix.platform.target }}/release/todo-reminder
+        if: matrix.platform.target != 'aarch64-unknown-linux-musl'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: todo-reminder-${{ matrix.platform.target }}
+          path: target/${{ matrix.platform.target }}/release/todo-reminder 

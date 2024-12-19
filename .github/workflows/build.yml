@@ -1,0 +1,14 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-job.yml
+
+  binary:
+    needs: test
+    uses: ./.github/workflows/binary-job.yml

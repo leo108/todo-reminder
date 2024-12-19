@@ -1,0 +1,67 @@
+[[rules]]
+path = "bash"
+language = "bash"
+file_extensions = ["sh"]
+
+[[rules]]
+path = "c"
+language = "c"
+file_extensions = ["c", "h"]
+
+[[rules]]
+path = "c_sharp"
+language = "c-sharp"
+file_extensions = ["cs", "csx", "cake", "cshtml", "razor"]
+
+[[rules]]
+path = "cpp"
+language = "cpp"
+file_extensions = ["cpp", "hpp", "cc", "hh", "cxx", "hxx"]
+
+[[rules]]
+path = "css"
+language = "css"
+file_extensions = ["css"]
+
+[[rules]]
+path = "go"
+language = "go"
+file_extensions = ["go"]
+
+[[rules]]
+path = "java"
+language = "java"
+file_extensions = ["java"]
+
+[[rules]]
+path = "javascript"
+language = "javascript"
+file_extensions = ["js", "mjs"]
+
+[[rules]]
+path = "php"
+language = "php"
+file_extensions = ["php"]
+
+[[rules]]
+path = "python"
+language = "python"
+file_extensions = ["py"]
+
+[[rules]]
+path = "ruby"
+language = "ruby"
+file_extensions = ["rb"]
+
+[[rules]]
+path = "rust"
+language = "rust"
+file_extensions = ["rs"]
+
+[[rules]]
+path = "typescript"
+language = "typescript"
+file_extensions = ["ts"]
+
+[parameters]
+editor_url = "vscode://file/%%file%%:%%line%%"

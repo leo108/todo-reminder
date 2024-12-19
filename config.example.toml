@@ -1,0 +1,12 @@
+[parameters]
+# The URL to open the file in the editor
+editor_url = "vscode://file/%%file%%:%%line%%"
+
+# You can add multiple rules to scan different directories for different languages
+[[rules]]
+# Directory to scan, relative to the configuration file
+path = "src"
+# See Supported Languages for the list of supported languages
+language = "rust"
+# Optional, if not set, the built-in extensions for the specified language will be used
+file_extensions = ["rs"]

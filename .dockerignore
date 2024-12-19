@@ -1,0 +1,31 @@
+# Version control
+.git
+.gitignore
+
+# Rust build artifacts
+/target
+**/*.rs.bk
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# GitHub Actions
+.github
+
+# Documentation
+*.md
+LICENSE*
+
+# Development configs
+.env*
+config.toml.example
+
+# Test files
+tests/
