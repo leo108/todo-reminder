@@ -5,7 +5,7 @@ TODO Reminder is a command-line tool that scans your codebase for TODO comments 
 ## Features
 
 - Parses TODO comments with due dates and owners.
-- Find TODO comments with invalid formats.
+- Finds TODO comments with invalid formats.
 - Supports multiple programming languages with language-specific configurations.
 - Generates formatted reports with clickable links to code lines.
 - Customizable settings via a configuration file.
