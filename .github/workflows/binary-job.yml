@@ -56,7 +56,8 @@ jobs:
         run: strip target/${{ matrix.platform.target }}/release/todo-reminder
         if: matrix.platform.target != 'aarch64-unknown-linux-musl'
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: todo-reminder-${{ matrix.platform.target }}
-          path: target/${{ matrix.platform.target }}/release/todo-reminder 
+          path: target/${{ matrix.platform.target }}/release/todo-reminder
+          retention-days: 7
