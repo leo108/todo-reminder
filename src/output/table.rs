@@ -2,6 +2,8 @@ use crate::cli::Cli;
 use crate::todo_analyzer::TodoWarning;
 use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, Attribute, Cell, Table};
 use std::collections::BTreeMap;
+use std::path::Path;
+use std::env;
 
 fn format_multiline_comment(comment: &str) -> String {
     let lines: Vec<&str> = comment.lines().map(|line| line.trim()).collect();
@@ -28,12 +30,29 @@ fn print_formatted_warnings(
         return;
     }
 
+    let first_warning_line = warnings[0].line_number();
+    
+    // Get the absolute path for the clickable link
+    let absolute_path = if Path::new(file_path).is_relative() {
+        if let Ok(current_dir) = env::current_dir() {
+            let absolute = current_dir.join(file_path);
+            match absolute.to_str() {
+                Some(abs_path) => abs_path.to_string(),
+                None => file_path.to_string(),
+            }
+        } else {
+            file_path.to_string()
+        }
+    } else {
+        file_path.to_string()
+    };
+
     let clickable_file_link = if cli.no_tty {
         file_path.to_string()
     } else {
         get_clickable_file_link(
-            file_path,
-            1,
+            &absolute_path,
+            first_warning_line,
             &truncate_file_path(file_path, cli.max_comment_length),
             editor_url,
         )
