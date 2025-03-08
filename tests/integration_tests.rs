@@ -30,3 +30,37 @@ fn test_main_with_json_format() {
     let stdout = String::from_utf8_lossy(&output.stdout);
     insta::assert_debug_snapshot!(stdout.lines().collect::<Vec<&str>>());
 }
+
+#[test]
+fn test_check_due_only_with_table_format() {
+    let output = Command::new("cargo")
+        .arg("run")
+        .arg("tests/test_files/config.toml")
+        .arg("--format=table")
+        .arg("--no-tty")
+        .arg("--exit-zero")
+        .arg("--check-due-only")
+        .output()
+        .expect("Failed to execute command");
+
+    assert!(output.status.success());
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    insta::assert_debug_snapshot!(stdout.lines().collect::<Vec<&str>>());
+}
+
+#[test]
+fn test_check_format_only_with_table_format() {
+    let output = Command::new("cargo")
+        .arg("run")
+        .arg("tests/test_files/config.toml")
+        .arg("--format=table")
+        .arg("--no-tty")
+        .arg("--exit-zero")
+        .arg("--check-format-only")
+        .output()
+        .expect("Failed to execute command");
+
+    assert!(output.status.success());
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    insta::assert_debug_snapshot!(stdout.lines().collect::<Vec<&str>>());
+}

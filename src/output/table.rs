@@ -30,6 +30,22 @@ fn print_formatted_warnings(
         return;
     }
 
+    let has_warnings_to_display = warnings.iter().any(|warning| match warning {
+        TodoWarning::InvalidFormat { .. } => {
+            cli.check_format_only || (!cli.check_due_only && !cli.check_format_only)
+        }
+        TodoWarning::Overdue { .. } => {
+            cli.check_due_only || (!cli.check_due_only && !cli.check_format_only)
+        }
+        TodoWarning::DueSoon { .. } => {
+            cli.check_due_only || (!cli.check_due_only && !cli.check_format_only)
+        }
+    });
+
+    if !has_warnings_to_display {
+        return;
+    }
+
     let first_warning_line = warnings[0].line_number();
 
     // Get the absolute path for the clickable link
