@@ -2,8 +2,8 @@ use crate::cli::Cli;
 use crate::todo_analyzer::TodoWarning;
 use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, Attribute, Cell, Table};
 use std::collections::BTreeMap;
-use std::path::Path;
 use std::env;
+use std::path::Path;
 
 fn format_multiline_comment(comment: &str) -> String {
     let lines: Vec<&str> = comment.lines().map(|line| line.trim()).collect();
@@ -31,7 +31,7 @@ fn print_formatted_warnings(
     }
 
     let first_warning_line = warnings[0].line_number();
-    
+
     // Get the absolute path for the clickable link
     let absolute_path = if Path::new(file_path).is_relative() {
         if let Ok(current_dir) = env::current_dir() {
