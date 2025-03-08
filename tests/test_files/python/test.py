@@ -4,7 +4,7 @@ TODO fix some issues
 
 class SampleClass:
     """
-    TODO: 2023-10-01 @alice Implement the function
+    TODO: 2023-10-01 @alice.smith Implement the function
     """
 
     def sample_function(self):
@@ -21,9 +21,9 @@ class SampleClass:
 
 def function_with_todo(self):
     """
-    TODO: 2023-10-01 @alice Implement the function
+    TODO: 2023-10-01 @alice.smith Implement the function
     """
     # This is a normal comment
     # TODO: incorrect format
-    # TODO: 2023-10-01 @alice Implement the function
+    # TODO: 2023-10-01 @alice.smith Implement the function
     pass

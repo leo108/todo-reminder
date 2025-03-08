@@ -60,7 +60,7 @@ impl<'config> TodoAnalyzer<'config> {
 
         let todo_regex = Regex::new(r"(?i)(TODO|FIXME)(:)?|@todo(:)?")?;
         let todo_format_regex =
-            Regex::new(r"(?i)(TODO|FIXME):\s*(\d{4}-\d{2}-\d{2})\s+@(\w+)\s*(.*)")?;
+            Regex::new(r"(?i)(TODO|FIXME):\s*(\d{4}-\d{2}-\d{2})\s+@([\w.-]+)\s*(.*)")?;
 
         Ok(Self {
             parser,

@@ -13,11 +13,6 @@ todo-reminder:
         echo "TODO issues were found. Check the output above."
         exit 1
       fi
-  artifacts:
-    when: always
-    paths:
-      - todo-report.json
-    expire_in: 1 week
 
 todo-reminder-due-soon:
   stage: lint
@@ -31,20 +26,17 @@ todo-reminder-due-soon:
         exit 0
       fi
       
-      # Generate table output
       todo-reminder todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table > todos-due-soon-report.txt
       
       # If the file exists and is not empty
       if [ -s todos-due-soon-report.txt ]; then
         echo "TODOs due within 30 days were found."
         
-        # Install dependencies for API calls
-        apt-get update && apt-get install -y curl
+        apk add curl
         
         TABLE_CONTENT=$(cat todos-due-soon-report.txt)
         COMMENT="### ⚠️ TODOs Due Within 30 Days\n\nThe following TODOs are due soon and should be addressed:\n\n\`\`\`\n${TABLE_CONTENT}\n\`\`\`"
         
-        # Post comment to the merge request
         curl --request POST \
           --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
           --header "Content-Type: application/json" \
