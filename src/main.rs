@@ -48,50 +48,52 @@ fn main() -> anyhow::Result<()> {
                 .collect()
         });
 
-        let abs_path = abs_config_file_dir.join(&rule.path);
+        for rule_path in &rule.paths {
+            let abs_path = abs_config_file_dir.join(rule_path);
 
-        if !abs_path.exists() || !abs_path.is_dir() {
-            eprintln!(
-                "Directory does not exist or not a folder: {}",
-                abs_path.display()
-            );
-            continue;
-        }
-
-        for entry in WalkDir::new(&abs_path)
-            .into_iter()
-            .filter_map(Result::ok)
-            .filter(|e| e.file_type().is_file())
-        {
-            let path = entry.path();
-            let extension = path.extension().and_then(|ext| ext.to_str());
-
-            if extension.is_none() {
-                continue;
-            }
-            let ext = extension.unwrap();
-
-            if !file_extensions.contains(&ext.to_string()) {
+            if !abs_path.exists() || !abs_path.is_dir() {
+                eprintln!(
+                    "Directory does not exist or not a folder: {}",
+                    abs_path.display()
+                );
                 continue;
             }
 
-            match analyzer.analyze_file(path, &rule.language) {
-                Ok(todos) => {
-                    let mut warnings = analyzer.check_todos(&todos, &cli);
-                    // sort warnings by line number
-                    warnings.sort_by_key(|w| w.line_number());
+            for entry in WalkDir::new(&abs_path)
+                .into_iter()
+                .filter_map(Result::ok)
+                .filter(|e| e.file_type().is_file())
+            {
+                let path = entry.path();
+                let extension = path.extension().and_then(|ext| ext.to_str());
 
-                    let relative_path = path
-                        .strip_prefix(&abs_config_file_dir)?
-                        .display()
-                        .to_string();
-                    warnings_by_file
-                        .entry(relative_path)
-                        .or_insert_with(Vec::new)
-                        .extend(warnings);
+                if extension.is_none() {
+                    continue;
                 }
-                Err(e) => {
-                    eprintln!("Error analyzing file {}: {}", path.display(), e);
+                let ext = extension.unwrap();
+
+                if !file_extensions.contains(&ext.to_string()) {
+                    continue;
+                }
+
+                match analyzer.analyze_file(path, &rule.language) {
+                    Ok(todos) => {
+                        let mut warnings = analyzer.check_todos(&todos, &cli);
+                        // sort warnings by line number
+                        warnings.sort_by_key(|w| w.line_number());
+
+                        let relative_path = path
+                            .strip_prefix(&abs_config_file_dir)?
+                            .display()
+                            .to_string();
+                        warnings_by_file
+                            .entry(relative_path)
+                            .or_insert_with(Vec::new)
+                            .extend(warnings);
+                    }
+                    Err(e) => {
+                        eprintln!("Error analyzing file {}: {}", path.display(), e);
+                    }
                 }
             }
         }

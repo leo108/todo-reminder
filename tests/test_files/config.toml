@@ -1,65 +1,65 @@
 [[rules]]
-path = "bash"
+paths = ["bash"]
 language = "bash"
 file_extensions = ["sh"]
 
 [[rules]]
-path = "c"
+paths = ["c"]
 language = "c"
 file_extensions = ["c", "h"]
 
 [[rules]]
-path = "c_sharp"
+paths = ["c_sharp"]
 language = "c-sharp"
 file_extensions = ["cs", "csx", "cake", "cshtml", "razor"]
 
 [[rules]]
-path = "cpp"
+paths = ["cpp"]
 language = "cpp"
 file_extensions = ["cpp", "hpp", "cc", "hh", "cxx", "hxx"]
 
 [[rules]]
-path = "css"
+paths = ["css"]
 language = "css"
 file_extensions = ["css"]
 
 [[rules]]
-path = "go"
+paths = ["go"]
 language = "go"
 file_extensions = ["go"]
 
 [[rules]]
-path = "java"
+paths = ["java"]
 language = "java"
 file_extensions = ["java"]
 
 [[rules]]
-path = "javascript"
+paths = ["javascript"]
 language = "javascript"
 file_extensions = ["js", "mjs"]
 
 [[rules]]
-path = "php"
+paths = ["php"]
 language = "php"
 file_extensions = ["php"]
 
 [[rules]]
-path = "python"
+paths = ["python"]
 language = "python"
 file_extensions = ["py"]
 
 [[rules]]
-path = "ruby"
+paths = ["ruby"]
 language = "ruby"
 file_extensions = ["rb"]
 
 [[rules]]
-path = "rust"
+paths = ["rust", "rust_other"]
 language = "rust"
 file_extensions = ["rs"]
 
 [[rules]]
-path = "typescript"
+paths = ["typescript"]
 language = "typescript"
 file_extensions = ["ts"]
 

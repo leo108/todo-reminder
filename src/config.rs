@@ -9,7 +9,7 @@ pub struct Config {
 
 #[derive(Debug, Deserialize)]
 pub struct Rule {
-    pub path: PathBuf,
+    pub paths: Vec<PathBuf>,
     pub language: String,
     pub file_extensions: Option<Vec<String>>,
 }

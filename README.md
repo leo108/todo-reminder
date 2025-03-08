@@ -70,7 +70,7 @@ Create a `config.toml` file to specify the directories to scan and other setting
 editor_url = "vscode://file/%%file%%:%%line%%"
 
 [[rules]]
-path = "src"
+paths = ["src"]
 language = "rust"
 file_extensions = ["rs"]
 ```
