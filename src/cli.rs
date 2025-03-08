@@ -12,7 +12,7 @@ pub struct Cli {
     pub check_due_only: bool,
 
     #[clap(long, default_value = "0")]
-    pub due_after: u32,
+    pub due_in: u32,
 
     #[clap(long, default_value = "100")]
     pub max_comment_length: usize,

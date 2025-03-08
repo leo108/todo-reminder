@@ -21,7 +21,7 @@ jobs:
       - name: Check TODO comments
         uses: docker://leo108/todo-reminder:latest
         with:
-          args: /github/workspace/todo-reminder.toml
+          args: /github/workspace/todo-reminder.toml --no-tty
           
   todo-check-due-soon:
     name: Scan for TODOs due soon
@@ -36,7 +36,7 @@ jobs:
         uses: docker://leo108/todo-reminder:latest
         id: todo-check
         with:
-          args: /github/workspace/todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table
+          args: /github/workspace/todo-reminder.toml --due-in=30 --check-due-only --exit-zero --format=table  --no-tty
       
       - name: Save table output to file
         run: |

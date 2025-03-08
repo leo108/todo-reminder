@@ -7,7 +7,7 @@ todo-reminder:
   image: leo108/todo-reminder:latest
   script:
     - |
-      if todo-reminder todo-reminder.toml; then
+      if todo-reminder todo-reminder.toml --no-tty; then
         echo "No TODO issues found."
       else
         echo "TODO issues were found. Check the output above."
@@ -26,9 +26,8 @@ todo-reminder-due-soon:
         exit 0
       fi
       
-      todo-reminder todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table > todos-due-soon-report.txt
+      todo-reminder todo-reminder.toml --due-in=30 --check-due-only --exit-zero --format=table --no-tty > todos-due-soon-report.txt
       
-      # If the file exists and is not empty
       if [ -s todos-due-soon-report.txt ]; then
         echo "TODOs due within 30 days were found."
         

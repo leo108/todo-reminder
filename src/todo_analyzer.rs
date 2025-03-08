@@ -1,3 +1,4 @@
+use crate::cli::Cli;
 use crate::languages::LanguageConfig;
 use anyhow::Result;
 use chrono::{DateTime, Local, NaiveDateTime, TimeZone};
@@ -148,7 +149,7 @@ impl<'config> TodoAnalyzer<'config> {
         Ok(todos)
     }
 
-    pub fn check_todos(&self, todos: &[TodoItem]) -> Vec<TodoWarning> {
+    pub fn check_todos(&self, todos: &[TodoItem], cli: &Cli) -> Vec<TodoWarning> {
         let now = Local::now();
         let mut warnings = Vec::new();
 
@@ -168,7 +169,7 @@ impl<'config> TodoAnalyzer<'config> {
                         owner: todo.owner.clone(),
                         comment: todo.text.clone(),
                     });
-                } else {
+                } else if cli.due_in > 0 && days_until_due <= cli.due_in as i64 {
                     warnings.push(TodoWarning::DueSoon {
                         line_number: todo.line_number,
                         due_date,

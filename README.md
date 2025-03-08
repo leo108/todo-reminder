@@ -55,7 +55,7 @@ docker run --rm -t -v $(pwd):/workdir leo108/todo-reminder:latest /workdir/confi
 |--------|-------------|---------|
 | `--check-format-only` | Only check for TODO comments with invalid formats, conflicts with `--check-due-only` | `false` |
 | `--check-due-only` | Only check for overdue or due soon TODOs, conflicts with `--check-format-only` | `false` |
-| `--due-after=<DAYS>` | Only show TODOs that are due within the specified number of days | `0` |
+| `--due-in=<DAYS>` | Only show TODOs that are due within the specified number of days | `0` |
 | `--format=<FORMAT>` | Specify the output format (`table` or `json`) | `table` |
 | `--max-comment-length=<LENGTH>` | Truncate comments to the specified maximum length in table format | `100` |
 | `--no-tty` | Disable TTY output | `false` |

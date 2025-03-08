@@ -77,7 +77,7 @@ fn main() -> anyhow::Result<()> {
 
             match analyzer.analyze_file(path, &rule.language) {
                 Ok(todos) => {
-                    let mut warnings = analyzer.check_todos(&todos);
+                    let mut warnings = analyzer.check_todos(&todos, &cli);
                     // sort warnings by line number
                     warnings.sort_by_key(|w| w.line_number());
 

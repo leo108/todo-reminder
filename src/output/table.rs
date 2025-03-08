@@ -165,10 +165,9 @@ fn print_formatted_warnings(
                 due_date,
                 owner,
                 comment,
-                days_until_due,
                 ..
             } => {
-                if cli.due_after > 0 && *days_until_due <= cli.due_after as i64 {
+                if cli.check_due_only || (!cli.check_due_only && !cli.check_format_only) {
                     table.add_row(vec![
                         Cell::new(if cli.no_tty {
                             line_number.to_string()
