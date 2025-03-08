@@ -77,6 +77,19 @@ file_extensions = ["rs"]
 
 Check out the [config.example.toml](config.example.toml) file for details.
 
+## Continuous Integration
+
+TODO Reminder can be integrated into your CI/CD pipeline to automatically check for outdated or incorrectly formatted TODO comments. Example configurations are provided for popular CI platforms:
+
+- [GitHub Actions](ci-examples/github-actions.yml)
+- [GitLab CI](ci-examples/gitlab-ci.yml)
+- [Bitbucket Pipelines](ci-examples/bitbucket-pipelines.yml)
+
+These examples can be used to:
+- Run scheduled checks for TODOs (e.g., weekly)
+- Check for TODOs on pull/merge requests
+- Generate reports and artifacts for tracking
+
 ## Supported Languages
 
 | Language    | Config value    | Default file extensions |

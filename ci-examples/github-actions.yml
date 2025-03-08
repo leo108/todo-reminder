@@ -1,0 +1,24 @@
+name: TODO Reminder Check
+
+on:
+  schedule:
+    # Run weekly on Monday at 9:00 AM
+    - cron: '0 9 * * 1'
+  # Allow manual trigger
+  workflow_dispatch:
+  # Optionally run on pull requests
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  todo-check:
+    name: Scan for TODOs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check TODO comments
+        uses: docker://leo108/todo-reminder:latest
+        with:
+          args: /github/workspace/todo-reminder.toml

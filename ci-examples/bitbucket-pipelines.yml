@@ -1,0 +1,25 @@
+---
+definitions:
+  steps:
+    - step: &todo-reminder
+        name: Check TODO comments
+        image: leo108/todo-reminder:latest
+        script:
+          - |
+            if /app/todo-reminder todo-reminder.toml; then
+              echo "No TODO issues found."
+            else
+              echo "TODO issues were found. Check the output above."
+              # Uncomment to make the pipeline fail on TODOs:
+              # exit 1
+            fi
+
+pipelines:
+  pull-requests:
+    '**':
+      - step: *todo-reminder
+  
+  # Run weekly on Monday
+  scheduled:
+    todo-check:
+      - step: *todo-reminder
