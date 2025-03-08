@@ -18,3 +18,45 @@ todo-reminder:
     paths:
       - todo-report.json
     expire_in: 1 week
+
+todo-reminder-due-soon:
+  stage: lint
+  image: leo108/todo-reminder:latest
+  needs:
+    - todo-reminder
+  script:
+    - |
+      if [ -z "${CI_MERGE_REQUEST_IID}" ]; then
+        echo "Not in a merge request context. Skipping TODOs due soon check."
+        exit 0
+      fi
+      
+      # Generate table output
+      todo-reminder todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table > todos-due-soon-report.txt
+      
+      # If the file exists and is not empty
+      if [ -s todos-due-soon-report.txt ]; then
+        echo "TODOs due within 30 days were found."
+        
+        # Install dependencies for API calls
+        apt-get update && apt-get install -y curl
+        
+        TABLE_CONTENT=$(cat todos-due-soon-report.txt)
+        COMMENT="### ⚠️ TODOs Due Within 30 Days\n\nThe following TODOs are due soon and should be addressed:\n\n\`\`\`\n${TABLE_CONTENT}\n\`\`\`"
+        
+        # Post comment to the merge request
+        curl --request POST \
+          --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
+          --header "Content-Type: application/json" \
+          --data "{\"body\":\"${COMMENT}\"}" \
+          "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes"
+      else
+        echo "No TODOs due within 30 days found."
+      fi
+  artifacts:
+    when: always
+    paths:
+      - todos-due-soon-report.txt
+    expire_in: 1 week
+  only:
+    - merge_requests

@@ -6,18 +6,49 @@ definitions:
         image: leo108/todo-reminder:latest
         script:
           - |
-            if /app/todo-reminder todo-reminder.toml; then
+            if todo-reminder todo-reminder.toml; then
               echo "No TODO issues found."
             else
               echo "TODO issues were found. Check the output above."
               # Uncomment to make the pipeline fail on TODOs:
               # exit 1
             fi
+    
+    - step: &todo-reminder-due-soon
+        name: Check TODOs due within 30 days
+        image: leo108/todo-reminder:latest
+        script:
+          - |
+            if [ -z "${BITBUCKET_PR_ID}" ]; then
+              echo "Not in a pull request context. Skipping TODOs due soon check."
+              exit 0
+            fi
+            
+            # Generate table output
+            todo-reminder todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table > todos-due-soon-report.txt
+            
+            # If the file exists and is not empty
+            if [ -s todos-due-soon-report.txt ]; then
+              echo "TODOs due within 30 days were found."
+              
+              TABLE_CONTENT=$(cat todos-due-soon-report.txt)
+              COMMENT="### ⚠️ TODOs Due Within 30 Days\n\nThe following TODOs are due soon and should be addressed:\n\n\`\`\`\n${TABLE_CONTENT}\n\`\`\`"
+              
+              # Post the comment to the PR
+              curl -X POST \
+                -H "Content-Type: application/json" \
+                -u "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" \
+                "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pullrequests/${BITBUCKET_PR_ID}/comments" \
+                -d "{\"content\":{\"raw\":\"${COMMENT}\"}}"
+            else
+              echo "No TODOs due within 30 days found."
+            fi
 
 pipelines:
   pull-requests:
     '**':
       - step: *todo-reminder
+      - step: *todo-reminder-due-soon
   
   # Run weekly on Monday
   scheduled:

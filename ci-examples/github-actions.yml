@@ -22,3 +22,50 @@ jobs:
         uses: docker://leo108/todo-reminder:latest
         with:
           args: /github/workspace/todo-reminder.toml
+          
+  todo-check-due-soon:
+    name: Scan for TODOs due soon
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [todo-check]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check TODOs due within 30 days
+        uses: docker://leo108/todo-reminder:latest
+        id: todo-check
+        with:
+          args: /github/workspace/todo-reminder.toml --due-after=30 --check-due-only --exit-zero --format=table
+      
+      - name: Save table output to file
+        run: |
+          echo "${{ steps.todo-check.outputs.stdout }}" > todos-due-soon-report.txt
+          
+      - name: Post comment to PR if TODOs found
+        if: steps.todo-check.outputs.has_results == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            try {
+              if (fs.existsSync('todos-due-soon-report.txt')) {
+                const tableOutput = fs.readFileSync('todos-due-soon-report.txt', 'utf8');
+                
+                if (tableOutput.trim() !== '') {
+                  let comment = '### ⚠️ TODOs Due Within 30 Days\n\n';
+                  comment += 'The following TODOs are due soon and should be addressed:\n\n';
+                  comment += '```\n' + tableOutput + '\n```';
+                  
+                  github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: comment
+                  });
+                }
+              }
+            } catch (error) {
+              console.log('Error posting comment:', error);
+            }
