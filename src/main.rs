@@ -104,7 +104,14 @@ fn main() -> anyhow::Result<()> {
         _ => print_table(&warnings_by_file, &cli, &config.parameters.editor_url),
     }
 
-    if !cli.exit_zero && !warnings_by_file.is_empty() {
+    // Count actual warnings across all files
+    let mut total_warnings = 0;
+    for (_, warnings) in &warnings_by_file {
+        total_warnings += warnings.len();
+    }
+
+    // Only exit with code 1 if there are actual warnings and exit_zero is not set
+    if !cli.exit_zero && total_warnings > 0 {
         std::process::exit(1);
     }
 
