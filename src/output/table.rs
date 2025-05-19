@@ -13,7 +13,7 @@ fn format_multiline_comment(comment: &str) -> String {
 pub fn print_table(
     warnings_by_file: &BTreeMap<String, Vec<TodoWarning>>,
     cli: &Cli,
-    editor_url: &str,
+    editor_url: Option<&str>,
 ) {
     for (file_path, warnings) in warnings_by_file {
         print_formatted_warnings(file_path, warnings, cli, editor_url);
@@ -24,7 +24,7 @@ fn print_formatted_warnings(
     file_path: &str,
     warnings: &[TodoWarning],
     cli: &Cli,
-    editor_url: &str,
+    editor_url: Option<&str>,
 ) {
     if warnings.is_empty() {
         return;
@@ -223,10 +223,15 @@ fn get_clickable_file_link(
     file_path: &str,
     line_number: usize,
     display_text: &str,
-    editor_url: &str,
+    editor_url: Option<&str>,
 ) -> String {
-    let url = editor_url
-        .replace("%%file%%", file_path)
-        .replace("%%line%%", &line_number.to_string());
-    format!("\x1B]8;;{}\x1B\\{}\x1B]8;;\x1B\\", url, display_text)
+    match editor_url {
+        Some(url) => {
+            let url = url
+                .replace("%%file%%", file_path)
+                .replace("%%line%%", &line_number.to_string());
+            format!("\x1B]8;;{}\x1B\\{}\x1B]8;;\x1B\\", url, display_text)
+        }
+        None => display_text.to_string(),
+    }
 }
