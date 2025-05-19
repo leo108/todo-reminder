@@ -101,7 +101,11 @@ fn main() -> anyhow::Result<()> {
 
     match cli.format.as_str() {
         "json" => print_json(&warnings_by_file),
-        _ => print_table(&warnings_by_file, &cli, &config.parameters.editor_url),
+        _ => print_table(
+            &warnings_by_file,
+            &cli,
+            config.parameters.editor_url.as_deref(),
+        ),
     }
 
     // Count actual warnings across all files

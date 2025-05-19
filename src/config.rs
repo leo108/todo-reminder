@@ -16,7 +16,7 @@ pub struct Rule {
 
 #[derive(Debug, Deserialize)]
 pub struct Parameters {
-    pub editor_url: String,
+    pub editor_url: Option<String>,
 }
 
 impl Config {
