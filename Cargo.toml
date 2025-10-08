@@ -8,7 +8,7 @@ anyhow = "1.0.99"
 chrono = "0.4.41"
 clap = { version = "4.5.46", features = ["derive"] }
 colored = "3.0.0"
-comfy-table = { version = "7.2.0", features = ["custom_styling"]}
+comfy-table = { version = "7.2.1", features = ["custom_styling"]}
 insta = "1.43.1"
 regex = "1.11.2"
 serde = { version = "1.0.219", features = ["derive"] }
