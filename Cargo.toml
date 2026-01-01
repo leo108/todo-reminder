@@ -14,7 +14,7 @@ regex = "1.12.2"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.148"
 streaming-iterator = "0.1"
-toml = "0.9.8"
+toml = "0.9.10"
 tree-sitter = "0.26.3"
 tree-sitter-bash = "0.25.1"
 tree-sitter-c = "0.24.1"
